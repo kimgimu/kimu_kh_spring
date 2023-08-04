@@ -1,0 +1,84 @@
+<div id="comments-list" class="m-1">
+	<div id="comments-new" class="card m-2">
+		<div class="card-header bg-dark text-white">
+			댓글 쓰기
+		</div>
+		<div class="card-body">
+			<!-- 댓글 작성 폼 -->
+			<form>
+				<!-- 닉네임 입력 -->
+				<div class="mb-3">
+					<label for="new-comment-nickname" class="form-label">닉네임</label>
+					<input id="new-comment-nickname" class="form-control form-control-sm"/>
+				</div>
+				<!-- 댓글 입력 -->
+				<div class="mb-3">
+					<label for="new-comment-body" class="form-label">댓글</label>
+					<textarea id="new-comment-body" class="form-control form-control-sm" rows="5"
+						style="resize: none;"></textarea>
+				</div>
+				<!-- 작성하는 댓글이 어떤 메인글의 댓글인가 저장하기 위해 메인글의 id를 히든으로 전달한다. -->
+				{{#article}}
+				<input id="new-comment-article-id" type="hidden" value="{{id}}"/>
+				{{/article}}
+				<!-- 전송 버튼 -->
+				<button id="comment-create-btn" class="btn btn-outline-primary btn-sm" type="button">
+					댓글 저장
+				</button>
+			</form>
+		</div>
+	</div>
+</div>
+
+<script type ="text/javascript">
+
+	//전송 버튼을 선택해서 click 이벤트를 걸어준다.
+	const commentCreateBtn = document.querySelector('#comment-create-btn');
+	console.log(commentCreateBtn);
+
+	// addEventListener ('이벤트',실행할 함수)
+	commentCreateBtn.addEventListener('click',function(){
+
+	//마우스로 버튼을 클릭하면 함수가 실행되도록 리스너한테 알려준다
+
+	// 새 댓글 객체를 생성한다.
+    const comment = {
+        nickname : document.querySelector('#new-comment-nickname').value,
+        body : document.querySelector('#new-comment-body').value,
+        article_id : document.querySelector('#new-comment-article-id').value
+    };
+    console.log(comment);
+
+    //Ajax를 이용해서 rest api 호출한다
+    //실제 데이터를 가지고 있는 서버에 접근을 하기 위해서 사용하는 통신방식
+    //@PostMapping("/api/comments/{articleId}/comments")
+    const url = '/api/comments/'+comment.article_id+ '/comments'
+    console.log(url);
+
+    //전송하는 방식! ajax 이용해서
+    fetch(url,{
+    //전송할 내용들을 작성
+    method : 'POST',
+    body : JSON.stringify(comment) , //자바스크립트 객체 => json으로 변환한다
+    headers : {
+        'Content-Type' : 'application/json'
+        }
+    }).then(function(response){
+        console.log(response);
+        //실제 http 응답코드에 따른 메세지 출력
+        const msg = response.ok ? '댓글이 등록되었습니다' : '댓글 등록 실패!!';
+        alert(msg);
+        //현재 페이지를 새로고침한다
+        location.reload();
+    });
+});
+
+</script>
+
+
+
+
+
+
+
+

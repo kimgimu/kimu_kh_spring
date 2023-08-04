@@ -1,0 +1,48 @@
+{{>./layouts/header}}
+
+
+	<h1 align="center">게시판 목록</h1>
+	<table class="table">
+	  <thead>
+	    <tr>
+	      <th scope="col">ID</th>
+	      <th scope="col">Title</th>
+	      <th scope="col">Content</th>
+	    </tr>
+	  </thead>
+
+	  <tbody class="table-group-divider">
+		  <!-- 범위지정 X 의 경우 
+		  		컨트롤러에서 넘어오는 Model 객체에 저장되서 
+		  		넘어오는 데이터에	"."을 찍어서 멤버에 접근
+		 	
+			- 컨트롤러에서 넘어오는 Model 객체에 저장되어 넘어오는 값의
+	  		사용 범위를 정할 수 있다.
+	  		* 범위 지정하면 객체변수명. 을 생략 가능 *
+	  		
+	  		Model 객체로 넘어온 데이터가 목록이면 자동으로 반복 처리 -->
+	  		
+	  {{#articleList}}
+	    <tr>
+	      <td><a href="/articles/{{id}}">{{id}}</a></td>
+	      <td><a href="/articles/{{id}}">{{title}}</a></td>
+	      <td><a href="/articles/{{id}}">{{content}}</a></td>
+	    </tr>
+	    {{/articleList}}
+	    
+	    {{^articleList}}	<!-- 넘어온 객체 없을 경우 -->
+	   	 <tr align="center">
+	   	 	<th colspan="3" >
+	   	 		저장된 글이 없습니다.
+	   	 	</th>
+	   	 </tr>
+	    {{/articleList}}
+	    
+	  </tbody>
+	</table>
+
+	<!-- 새 글 링크 -->
+	<a href="/articles/new" class="btn btn-success">글쓰기</a>
+
+
+{{>./layouts/footer}}
